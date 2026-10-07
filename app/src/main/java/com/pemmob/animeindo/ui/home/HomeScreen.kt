@@ -29,22 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.pemmob.animeindo.ui.theme.*
 import com.pemmob.animeindo.util.Anime
-
-// ─────────────────────────────────────────────
-// Warna desain (sesuai design system Stitch)
-// ─────────────────────────────────────────────
-private val ColorBackground = Color(0xFF111222)
-private val ColorSurface = Color(0xFF1D1E2F)
-private val ColorSurfaceHigh = Color(0xFF261F54)
-private val ColorPrimary = Color(0xFF3B5BFE)
-private val ColorCyan = Color(0xFF30C4FF)
-private val ColorMagenta = Color(0xFFB844FF)
-private val ColorStarRating = Color(0xFFFFB800)
-private val ColorTextPrimary = Color(0xFFF2F3FF)
-private val ColorTextSecondary = Color(0xFFA7ABCF)
-private val ColorTextMuted = Color(0xFF6E729E)
-private val ColorOutline = Color(0xFF444656)
 
 // ─────────────────────────────────────────────
 // HomeScreen — Entry point composable
