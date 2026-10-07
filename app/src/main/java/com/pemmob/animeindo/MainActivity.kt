@@ -1,62 +1,64 @@
 package com.pemmob.animeindo
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.pemmob.animeindo.network.RetrofitClient
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.pemmob.animeindo.ui.detail.DetailScreen
+import com.pemmob.animeindo.ui.home.HomeScreen
 import com.pemmob.animeindo.ui.theme.AnimeIndoTheme
 
+/**
+ * MainActivity adalah entry point utama aplikasi AnimeIndo.
+ * Mengelola alur navigasi antar halaman menggunakan Navigation Compose (NavHost).
+ *
+ * Route yang tersedia:
+ * - "home" : Menampilkan daftar anime utama (HomeScreen)
+ * - "detail/{malId}" : Menampilkan detail lengkap anime yang dipilih (DetailScreen)
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AnimeIndoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LaunchedEffect(Unit) {
-                        try {
-                            val response = RetrofitClient.instance.getTopAnime()
-                            Log.d("AnimeIndo API", "Berhasil mengambil data: ${response.data?.size} anime. Contoh pertama: ${response.data?.firstOrNull()?.title}")
+                val navController = rememberNavController()
 
-                            val repository = com.pemmob.animeindo.util.AnimeRepository(RetrofitClient.instance)
-                            val searchResults = repository.searchAnime("Naruto")
-                            Log.d("AnimeIndo Repo", "Berhasil pencarian anime via AnimeRepository: ${searchResults.size} hasil. Anime pertama: ${searchResults.firstOrNull()?.title} (Score: ${searchResults.firstOrNull()?.score})")
-                        } catch (e: Exception) {
-                            Log.e("AnimeIndo API", "Gagal mengambil data: ${e.message}", e)
-                        }
+                NavHost(
+                    navController = navController,
+                    startDestination = "home"
+                ) {
+                    // Route 1: Home Screen
+                    composable("home") {
+                        HomeScreen(
+                            onAnimeClick = { malId ->
+                                navController.navigate("detail/$malId")
+                            }
+                        )
                     }
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+
+                    // Route 2: Detail Screen
+                    composable(
+                        route = "detail/{malId}",
+                        arguments = listOf(
+                            navArgument("malId") { type = NavType.IntType }
+                        )
+                    ) { backStackEntry ->
+                        val malId = backStackEntry.arguments?.getInt("malId") ?: return@composable
+                        DetailScreen(
+                            malId = malId,
+                            onBackClick = {
+                                navController.popBackStack()
+                            }
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AnimeIndoTheme {
-        Greeting("Android")
     }
 }
