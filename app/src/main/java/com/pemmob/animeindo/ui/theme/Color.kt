@@ -18,6 +18,18 @@ val ColorTextMuted = Color(0xFF6E729E)
 val ColorOutline = Color(0xFF444656)
 val ColorChipBackground = Color(0xFF282A45)
 
+// Aliases for Theme & Detail Screen Compatibility
+val DarkBackground = ColorBackground
+val DarkSurface = ColorSurface
+val DarkStatCard = ColorSurfaceHigh
+val PrimaryBlue = ColorPrimary
+val AccentCyan = ColorCyan
+val AccentMagenta = ColorMagenta
+val StarGold = ColorStarRating
+val TextPrimary = ColorTextPrimary
+val TextSecondary = ColorTextSecondary
+val ChipBackground = ColorChipBackground
+
 // Legacy Default Colors
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
